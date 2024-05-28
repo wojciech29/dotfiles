@@ -7,9 +7,7 @@ options=(
     "scratches  ~/work/scratches/"
     "ansible    ~/work/devops/ansible/"
     "iris       ~/work/iris/"
-    "private    ~/Dropbox/private/"
-    "nvim       ~/.config/nvim/"
-    "tmux       ~/.config/tmux/"
+    "private    ~/private/"
     "dotfiles   ~/dotfiles/"
     "music      ~/Music/"
 )
