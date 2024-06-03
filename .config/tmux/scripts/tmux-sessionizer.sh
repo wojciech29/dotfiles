@@ -31,8 +31,10 @@ for option in "${options[@]}"; do
 done
 
 # Extract the session name and path from the selected entry
-session_name=$(echo "$selected_entry" | awk '{print $1}')
-session_path=$(echo "$selected_entry" | awk '{print $2}')
+selected_entry_array=($selected_entry)
+session_name="${selected_entry_array[0]}"
+session_path="${selected_entry_array[1]}"
+session_path=$(eval echo $session_path)
 
 # Create a new tmux session if it doesn't exist
 tmux new-session -ds "$session_name" -c "$session_path" 2>/dev/null
