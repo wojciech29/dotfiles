@@ -25,6 +25,7 @@ return {
 		local servers = {
 			eslint = {},
 			tsserver = {},
+			-- pylsp = {},
 			pyright = {
 				settings = {
 					pyright = {

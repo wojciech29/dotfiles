@@ -5,7 +5,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.laststatus = 0
+-- vim.opt.laststatus = 0
 vim.opt.showmode = false
 vim.opt.mouse = "a" -- "a" is all modes, "n" is normal mode only
 vim.opt.clipboard = "unnamedplus" -- Sync clipboard between OS and Neovim.
@@ -57,43 +57,43 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
-	command = "if mode() != 'c' | checktime | endif",
-	pattern = { "*" },
-})
-
-local tmuxIntegrationGroup = vim.api.nvim_create_augroup("TmuxIntegration", { clear = true })
-local function update_tmux_title()
-	if vim.env.TMUX then
-		local filename = vim.fn.expand("%:t")
-		if filename ~= "" then
-			if vim.bo.modified then
-				filename = filename .. "*"
-			end
-			vim.fn.system("tmux rename-window " .. vim.fn.shellescape(filename))
-		end
-	end
-end
-
-vim.api.nvim_create_autocmd({
-	"BufEnter",
-	"BufNewFile",
-	"TextChanged",
-	"TextChangedI",
-	"BufWritePost",
-}, {
-	group = tmuxIntegrationGroup,
-	callback = update_tmux_title,
-})
-
-vim.api.nvim_create_autocmd({ "VimLeave" }, {
-	group = tmuxIntegrationGroup,
-	callback = function()
-		if vim.env.TMUX then
-			vim.fn.system("tmux set-window-option automatic-rename on")
-		end
-	end,
-})
+-- vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
+-- 	command = "if mode() != 'c' | checktime | endif",
+-- 	pattern = { "*" },
+-- })
+--
+-- local tmuxIntegrationGroup = vim.api.nvim_create_augroup("TmuxIntegration", { clear = true })
+-- local function update_tmux_title()
+-- 	if vim.env.TMUX then
+-- 		local filename = vim.fn.expand("%:t")
+-- 		if filename ~= "" then
+-- 			if vim.bo.modified then
+-- 				filename = filename .. "*"
+-- 			end
+-- 			vim.fn.system("tmux rename-window " .. vim.fn.shellescape(filename))
+-- 		end
+-- 	end
+-- end
+--
+-- vim.api.nvim_create_autocmd({
+-- 	"BufEnter",
+-- 	"BufNewFile",
+-- 	"TextChanged",
+-- 	"TextChangedI",
+-- 	"BufWritePost",
+-- }, {
+-- 	group = tmuxIntegrationGroup,
+-- 	callback = update_tmux_title,
+-- })
+--
+-- vim.api.nvim_create_autocmd({ "VimLeave" }, {
+-- 	group = tmuxIntegrationGroup,
+-- 	callback = function()
+-- 		if vim.env.TMUX then
+-- 			vim.fn.system("tmux set-window-option automatic-rename on")
+-- 		end
+-- 	end,
+-- })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
