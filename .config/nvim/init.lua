@@ -2,7 +2,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -33,15 +32,6 @@ vim.opt.incsearch = true
 vim.opt.hlsearch = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.autoread = true
-vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
-	pattern = "*",
-	callback = function()
-		if vim.fn.mode() ~= "c" then
-			vim.cmd("checktime")
-		end
-	end,
-})
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
@@ -65,6 +55,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 			timeout = 200,
 		})
 	end,
+})
+
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
+	command = "if mode() != 'c' | checktime | endif",
+	pattern = { "*" },
 })
 
 local tmuxIntegrationGroup = vim.api.nvim_create_augroup("TmuxIntegration", { clear = true })
@@ -120,14 +115,6 @@ require("lazy").setup({
 		event = "VimEnter", -- Sets the loading event to 'VimEnter' (loads which-key before all the UI elements are loaded)
 		config = function() -- This is the function that runs, AFTER loading
 			require("which-key").setup()
-
-			-- Document existing key chains
-			require("which-key").register({
-				["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-				["<leader>d"] = { name = "[D]iagnostic", _ = "which_key_ignore" },
-				["<leader>f"] = { name = "[F]ind", _ = "which_key_ignore" },
-				["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
-			})
 		end,
 	},
 	{
@@ -172,4 +159,12 @@ require("lazy").setup({
 		},
 	},
 	{ import = "plugins" },
+})
+
+local wk = require("which-key")
+wk.add({
+	{ "<leader>c", group = "[C]ode" },
+	{ "<leader>d", group = "[D]iagnostic" },
+	{ "<leader>f", group = "[F]ind" },
+	{ "<leader>r", group = "[R]ename" },
 })

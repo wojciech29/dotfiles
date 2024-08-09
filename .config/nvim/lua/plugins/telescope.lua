@@ -87,8 +87,8 @@ return {
 				mappings = {
 					i = {
 						["<esc>"] = actions.close,
-						["<C-r>"] = actions.cycle_history_prev,
-						["<C-S-r>"] = actions.cycle_history_next,
+						["<C-w>"] = actions.cycle_history_prev,
+						["<C-S-w>"] = actions.cycle_history_next,
 					},
 				},
 			},
@@ -163,6 +163,7 @@ return {
 		end
 		map("<leader>ff", "<Cmd>Telescope frecency workspace=CWD<CR>", "[F]ind using [F]recency")
 		map("<leader>fh", builtin.help_tags, "[F]ind [H]elp")
+		map("<leader>fn", "<Cmd>Telescope notify<CR>", "[F]ind [N]otify")
 		map("<leader>fw", live_grep_args_shortcuts.grep_word_under_cursor, "[F]ind current [W]ord")
 		map("<leader>fg", "<Cmd>Telescope live_grep_args<CR>", "[F]ind using [G]rep")
 		map("<leader>dd", builtin.diagnostics, "[D]iagnostics [D]isplay")
