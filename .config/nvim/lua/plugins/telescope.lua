@@ -134,6 +134,7 @@ return {
 					preview_title = false,
 				},
 				frecency = vim.tbl_deep_extend("error", {
+					auto_validate = true,
 					show_filter_column = false,
 					show_scores = false,
 					max_timestamps = 50,
