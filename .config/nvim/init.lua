@@ -1,34 +1,78 @@
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = false
+
+-- Disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
 vim.opt.termguicolors = true
+
+-- Make line numbers default
 vim.opt.number = true
 vim.opt.relativenumber = true
+
+-- Don't show the mode
 vim.opt.showmode = false
+
+-- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a" -- "a" is all modes, "n" is normal mode only
-vim.opt.clipboard = "unnamedplus" -- Sync clipboard between OS and Neovim.
+
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  See `:help 'clipboard'`
+vim.schedule(function()
+	vim.opt.clipboard = "unnamedplus"
+end)
+
+-- Enable break indent
 vim.opt.breakindent = true
 vim.opt.swapfile = false
 vim.opt.backup = false
+
+-- Save undo history
 vim.opt.undofile = true
+
+-- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- Keep signcolumn on by default
 vim.opt.signcolumn = "yes"
+
+-- Decrease update time
 vim.opt.updatetime = 250
+
+-- Decrease mapped sequence wait time
+-- Displays which-key popup sooner
 vim.opt.timeoutlen = 300
+
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
 vim.opt.smartindent = true
-vim.opt.smartcase = true
+
+-- Sets how neovim will display certain whitespace characters in the editor.
+--  See `:help 'list'`
+--  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
+-- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
+
+-- DO NOT Show which line your cursor is on
 vim.opt.cursorline = false
+
+-- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 8
-vim.opt.incsearch = true
-vim.opt.hlsearch = true
+
+-- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
@@ -56,10 +100,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
+	command = "if mode() != 'c' | checktime | endif",
+	pattern = { "*" },
+})
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	vim.fn.system({
+	local out = vim.fn.system({
 		"git",
 		"clone",
 		"--filter=blob:none",
@@ -67,65 +116,22 @@ if not vim.loop.fs_stat(lazypath) then
 		lazyrepo,
 		lazypath,
 	})
+	if vim.v.shell_error ~= 0 then
+		error("Error cloning lazy.nvim:\n" .. out)
+	end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	{ -- Useful plugin to show you pending keybinds.
-		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter' (loads which-key before all the UI elements are loaded)
-		config = function() -- This is the function that runs, AFTER loading
-			require("which-key").setup()
-		end,
-	},
-	{
-		"rmagatti/auto-session",
-		lazy = false,
-		config = function()
-			require("auto-session").setup({})
-		end,
-	},
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-	{
-		"ggandor/leap.nvim", -- Jump to any file, function, or line in your project
-		config = function()
-			require("leap").create_default_mappings()
-			require("leap.user").set_repeat_keys("<enter>", "<backspace>")
-		end,
-	},
+	-- {
+	-- 	"ggandor/leap.nvim", -- Jump to any file, function, or line in your project
+	-- 	config = function()
+	-- 		require("leap").create_default_mappings()
+	-- 		require("leap.user").set_repeat_keys("<enter>", "<backspace>")
+	-- 	end,
+	-- },
 	"github/copilot.vim",
-	{ -- Autoformat
-		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
-		cmd = { "ConformInfo" },
-		opts = {
-			notify_on_error = false,
-			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't
-				-- have a well standardized coding style. You can add additional
-				-- languages here or re-enable it for the disabled ones.
-				local disable_filetypes = { c = true, cpp = true }
-				return {
-					timeout_ms = 500,
-					lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-				}
-			end,
-			formatters_by_ft = {
-				lua = { "stylua" },
-				python = { "ruff_fix", "ruff_format" },
-				rust = { "rustfmt" },
-			},
-		},
-	},
-	{
-		"folke/noice.nvim",
-		event = "VeryLazy",
-		opts = {},
-		dependencies = {
-			"MunifTanjim/nui.nvim",
-			"rcarriga/nvim-notify",
-		},
-	},
 	{ import = "plugins" },
 })
 
