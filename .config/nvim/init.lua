@@ -46,6 +46,8 @@ vim.opt.undofile = true
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
+vim.opt.cmdheight = 0
+
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
 
