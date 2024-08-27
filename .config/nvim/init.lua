@@ -1,23 +1,14 @@
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
-
--- Disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.opt.termguicolors = true
 
--- Make line numbers default
 vim.opt.number = true
 vim.opt.relativenumber = true
 
--- Don't show the mode
 vim.opt.showmode = false
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -30,19 +21,9 @@ vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
 
--- Enable break indent
-vim.opt.breakindent = true
-vim.opt.swapfile = false
-vim.opt.backup = false
-
--- Save undo history
-vim.opt.undofile = true
-
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-
--- Keep signcolumn on by default
 vim.opt.signcolumn = "yes"
 
 -- Decrease update time
@@ -56,6 +37,8 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
+vim.opt.breakindent = true
+vim.opt.undofile = true
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
@@ -67,7 +50,8 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.inccommand = "split"
 
 -- DO NOT Show which line your cursor is on
-vim.opt.cursorline = false
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 8
@@ -75,6 +59,8 @@ vim.opt.scrolloff = 8
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+vim.opt.ruler = false
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
@@ -88,7 +74,6 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-vim.keymap.set("n", "<C-k>", "<cmd>b#<CR>")
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
@@ -100,20 +85,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
-	command = "if mode() != 'c' | checktime | endif",
-	pattern = { "*" },
-})
+vim.fn.sign_define("DiagnosticSignError", { text = "" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = "" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = "" })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
-	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	local out = vim.fn.system({
 		"git",
 		"clone",
 		"--filter=blob:none",
 		"--branch=stable",
-		lazyrepo,
+		"https://github.com/folke/lazy.nvim.git",
 		lazypath,
 	})
 	if vim.v.shell_error ~= 0 then
@@ -124,21 +108,17 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-	-- {
-	-- 	"ggandor/leap.nvim", -- Jump to any file, function, or line in your project
-	-- 	config = function()
-	-- 		require("leap").create_default_mappings()
-	-- 		require("leap.user").set_repeat_keys("<enter>", "<backspace>")
-	-- 	end,
-	-- },
-	"github/copilot.vim",
+	-- "github/copilot.vim",
+	{
+		"dgagn/diagflow.nvim",
+		event = "LspAttach",
+		opts = {},
+	},
+	{
+		"supermaven-inc/supermaven-nvim",
+		config = function()
+			require("supermaven-nvim").setup({})
+		end,
+	},
 	{ import = "plugins" },
-})
-
-local wk = require("which-key")
-wk.add({
-	{ "<leader>c", group = "[C]ode" },
-	{ "<leader>d", group = "[D]iagnostic" },
-	{ "<leader>f", group = "[F]ind" },
-	{ "<leader>r", group = "[R]ename" },
 })

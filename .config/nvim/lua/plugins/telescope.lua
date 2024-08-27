@@ -37,7 +37,7 @@ return {
 				vimgrep_arguments = {
 					"rg",
 					"-L",
-					-- "--hidden",
+					"--hidden",
 					"--color=never",
 					"--no-heading",
 					"--with-filename",
@@ -45,6 +45,7 @@ return {
 					"--column",
 					"--smart-case",
 				},
+				color_devicons = false,
 				sorting_strategy = "ascending",
 				prompt_title = false,
 				results_title = false,
@@ -66,6 +67,7 @@ return {
 					".env/",
 					"^backend/build/",
 					"^backend/sphinxsearch/",
+					"migrations-ddl",
 					".idea",
 					".git/",
 					".ruff_cache",
@@ -82,7 +84,6 @@ return {
 					"%.exe",
 					"%.pdf",
 					"ktlint",
-					"lazy-lock",
 				},
 				mappings = {
 					i = {
@@ -125,6 +126,7 @@ return {
 			},
 			extensions = {
 				file_browser = {
+					hidden = true,
 					grouped = true,
 					respect_gitignore = false,
 					hijack_netrw = true, -- disables netrw and use telescope-file-browser in its place
@@ -134,12 +136,13 @@ return {
 					preview_title = false,
 				},
 				frecency = vim.tbl_deep_extend("error", {
-					auto_validate = true,
+					disable_devicons = true,
 					show_filter_column = false,
-					show_scores = false,
+					show_unindexed = true,
 					max_timestamps = 50,
 				}, small_layout),
 				live_grep_args = {
+					hidden = true,
 					auto_quoting = true, -- enable/disable auto-quoting
 					mappings = {
 						i = {
@@ -154,23 +157,5 @@ return {
 		pcall(require("telescope").load_extension, "file_browser")
 		pcall(require("telescope").load_extension, "live_grep_args")
 		pcall(require("telescope").load_extension, "frecency")
-
-		local builtin = require("telescope.builtin")
-		local file_browser = require("telescope").extensions.file_browser.file_browser
-		local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
-
-		local map = function(keys, func, desc)
-			vim.keymap.set("n", keys, func, { desc = desc })
-		end
-		map("<leader>ff", "<Cmd>Telescope frecency workspace=CWD<CR>", "[F]ind using [F]recency")
-		map("<leader>fh", builtin.help_tags, "[F]ind [H]elp")
-		map("<leader>fn", "<Cmd>Telescope notify<CR>", "[F]ind [N]otify")
-		map("<leader>fw", live_grep_args_shortcuts.grep_word_under_cursor, "[F]ind current [W]ord")
-		map("<leader>fg", "<Cmd>Telescope live_grep_args<CR>", "[F]ind using [G]rep")
-		map("<leader>dd", builtin.diagnostics, "[D]iagnostics [D]isplay")
-		map("<leader>fe", function()
-			file_browser({ path = "%:p:h" })
-		end, "[F]ile [E]xplorer")
-		map("<leader>f/", builtin.current_buffer_fuzzy_find, "[F]uzzily [/] search in current buffer")
 	end,
 }
