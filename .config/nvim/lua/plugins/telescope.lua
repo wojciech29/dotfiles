@@ -1,12 +1,11 @@
 return {
 	"nvim-telescope/telescope.nvim",
 	event = "VimEnter",
-	branch = "0.1.x",
+	branch = "master",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-telescope/telescope-frecency.nvim",
 		"nvim-telescope/telescope-live-grep-args.nvim",
-		"nvim-telescope/telescope-file-browser.nvim",
 	},
 	config = function()
 		local actions = require("telescope.actions")
@@ -125,16 +124,6 @@ return {
 				},
 			},
 			extensions = {
-				file_browser = {
-					hidden = true,
-					grouped = true,
-					respect_gitignore = false,
-					hijack_netrw = true, -- disables netrw and use telescope-file-browser in its place
-					prompt_path = true,
-					prompt_title = false,
-					results_title = false,
-					preview_title = false,
-				},
 				frecency = vim.tbl_deep_extend("error", {
 					disable_devicons = true,
 					show_filter_column = false,
@@ -154,7 +143,6 @@ return {
 			},
 		})
 
-		pcall(require("telescope").load_extension, "file_browser")
 		pcall(require("telescope").load_extension, "live_grep_args")
 		pcall(require("telescope").load_extension, "frecency")
 	end,

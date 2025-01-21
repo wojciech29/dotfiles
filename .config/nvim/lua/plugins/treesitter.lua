@@ -2,6 +2,9 @@ return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
 	main = "nvim-treesitter.configs", -- Sets main module to use for opts
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter-context",
+	},
 	opts = {
 		ensure_installed = {
 			"bash",
@@ -25,5 +28,8 @@ return {
 		auto_install = true,
 		highlight = { enable = true },
 		indent = { disable = { "python" } },
+		context = {
+			enable = true,
+		},
 	},
 }

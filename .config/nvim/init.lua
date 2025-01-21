@@ -1,22 +1,15 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
 vim.opt.termguicolors = true
-
 vim.opt.number = true
 vim.opt.relativenumber = true
-
 vim.opt.showmode = false
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = "a" -- "a" is all modes, "n" is normal mode only
+vim.opt.mouse = "a" -- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  See `:help 'clipboard'`
+-- Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
@@ -25,28 +18,22 @@ end)
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
-
--- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
-
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.breakindent = true
 vim.opt.undofile = true
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300 -- Displays which-key popup sooner
 
 -- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
-vim.opt.cmdheight = 0
+vim.opt.listchars = {
+	tab = "» ",
+	trail = "·",
+	nbsp = "␣",
+}
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
@@ -77,6 +64,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
+	command = "if mode() != 'c' | checktime | endif",
+	pattern = { "*" },
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
@@ -93,7 +85,7 @@ vim.fn.sign_define("DiagnosticSignHint", { text = "" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = "" })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.uv.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local out = vim.fn.system({
 		"git",
 		"clone",
@@ -103,24 +95,79 @@ if not vim.uv.fs_stat(lazypath) then
 		lazypath,
 	})
 	if vim.v.shell_error ~= 0 then
-		error("Error cloning lazy.nvim:\n" .. out)
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
 	end
-end ---@diagnostic disable-next-line: undefined-field
+end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-	-- "github/copilot.vim",
+	-- Detect tabstop and shiftwidth automatically
+	"tpope/vim-sleuth",
+
+	-- File explorer
+	{
+		"stevearc/oil.nvim",
+		opts = {
+			view_options = {
+				show_hidden = true,
+			},
+		},
+	},
+
+	-- Diagnostics displayed in top-right corner
 	{
 		"dgagn/diagflow.nvim",
 		event = "LspAttach",
 		opts = {},
 	},
+
+	-- AI autocompletion
+	-- {
+	-- 	"supermaven-inc/supermaven-nvim",
+	-- 	config = function()
+	-- 		require("supermaven-nvim").setup({
+	-- 			keymaps = {
+	-- 				accept_suggestion = "<C-j>",
+	-- 				clear_suggestion = "<C-]>",
+	-- 				accept_word = "<C-\\>",
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
+
+	-- Colorscheme
 	{
-		"supermaven-inc/supermaven-nvim",
+		"rebelot/kanagawa.nvim",
 		config = function()
-			require("supermaven-nvim").setup({})
+			vim.cmd.colorscheme("kanagawa")
 		end,
 	},
+
+	-- Autoformatter
+	{
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		opts = {
+			notify_on_error = false,
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_fallback = false,
+			},
+			formatters_by_ft = {
+				lua = { "stylua" },
+				python = { "ruff_fix", "ruff_format" },
+				rust = { "rustfmt" },
+				json = { "jq" },
+			},
+		},
+	},
+
 	{ import = "plugins" },
 })
