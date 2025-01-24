@@ -42,7 +42,7 @@ fi
 
 export EDITOR="/usr/share/vim"
 
-export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="$PATH:/opt/nvim-linux64/bin"
 
 . "$HOME/.cargo/env"
 
