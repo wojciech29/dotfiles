@@ -52,22 +52,13 @@ vim.opt.splitbelow = true
 vim.opt.ruler = false
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
-
--- Move lines up and down in visual mode
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gc<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
 
 -- Navigation keymaps
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
-	command = "if mode() != 'c' | checktime | endif",
-	pattern = { "*" },
-})
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
@@ -110,6 +101,13 @@ require("lazy").setup({
 	-- Detect tabstop and shiftwidth automatically
 	"tpope/vim-sleuth",
 
+	-- Diagnostics displayed in top-right corner
+	{
+		"dgagn/diagflow.nvim",
+		event = "LspAttach",
+		opts = {},
+	},
+
 	-- File explorer
 	{
 		"stevearc/oil.nvim",
@@ -119,27 +117,6 @@ require("lazy").setup({
 			},
 		},
 	},
-
-	-- Diagnostics displayed in top-right corner
-	{
-		"dgagn/diagflow.nvim",
-		event = "LspAttach",
-		opts = {},
-	},
-
-	-- AI autocompletion
-	-- {
-	-- 	"supermaven-inc/supermaven-nvim",
-	-- 	config = function()
-	-- 		require("supermaven-nvim").setup({
-	-- 			keymaps = {
-	-- 				accept_suggestion = "<C-j>",
-	-- 				clear_suggestion = "<C-]>",
-	-- 				accept_word = "<C-\\>",
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
 
 	-- Colorscheme
 	{

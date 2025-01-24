@@ -9,27 +9,6 @@ return {
 	},
 	config = function()
 		local actions = require("telescope.actions")
-		local lga_actions = require("telescope-live-grep-args.actions")
-		local small_layout = {
-			sorting_strategy = "ascending",
-			layout_strategy = "center",
-			borderchars = {
-				prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-				results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-			},
-			prompt_title = false,
-			results_title = false,
-			preview_title = false,
-			previewer = false,
-			winblend = 5,
-			layout_config = {
-				horizontal = {
-					prompt_position = "top",
-				},
-				width = 0.55,
-				height = 0.45,
-			},
-		}
 
 		require("telescope").setup({
 			defaults = {
@@ -44,7 +23,9 @@ return {
 					"--column",
 					"--smart-case",
 				},
-				color_devicons = false,
+				get_status_text = function()
+					return ""
+				end,
 				sorting_strategy = "ascending",
 				prompt_title = false,
 				results_title = false,
@@ -92,52 +73,25 @@ return {
 					},
 				},
 			},
-			pickers = {
-				diagnostics = {
-					sorting_strategy = "ascending",
-					layout_strategy = "vertical",
-					preview_cutoff = 20,
-					layout_config = {
-						vertical = {
-							width = {
-								padding = 0.0,
-							},
-							height = {
-								padding = 0.0,
-							},
-							prompt_position = "top",
-							mirror = true,
-						},
-					},
-					line_width = 100,
-					prompt_title = false,
-					results_title = false,
-					preview_title = false,
-				},
-				find_files = vim.tbl_deep_extend("error", {
-					hidden = true,
-					no_ignore = true,
-				}, small_layout),
-				current_buffer_fuzzy_find = small_layout,
-				lsp_references = {
-					show_line = false,
-				},
-			},
 			extensions = {
-				frecency = vim.tbl_deep_extend("error", {
+				frecency = {
 					disable_devicons = true,
 					show_filter_column = false,
 					show_unindexed = true,
 					max_timestamps = 50,
-				}, small_layout),
-				live_grep_args = {
-					hidden = true,
-					auto_quoting = true, -- enable/disable auto-quoting
-					mappings = {
-						i = {
-							["<C-k>"] = lga_actions.quote_prompt(),
-							["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+					sorting_strategy = "ascending",
+					layout_strategy = "center",
+					borderchars = {
+						prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
+						results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
+					},
+					previewer = false,
+					layout_config = {
+						horizontal = {
+							prompt_position = "top",
 						},
+						width = 0.55,
+						height = 0.45,
 					},
 				},
 			},

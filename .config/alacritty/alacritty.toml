@@ -1,24 +1,9 @@
 # https://alacritty.org/config-alacritty.html
 
-#######
-# ENV #
-#######
-
-[env]
-term = "xterm-256color"
-
-##########
-# WINDOW #
-##########
-
 [window]
 decorations = "None"  # Default: "Full"
 opacity = 0.85  # Default: 1.0
 startup_mode = "Fullscreen"  # Default: "Windowed"
-
-########
-# FONT #
-########
 
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }  # Default for Linux/BSD: "monospace", Regular
@@ -31,10 +16,5 @@ size = 7.5  # Default: 11.25
 # Controls the OSC 52 behavior for clipboard interactions
 osc52 = "CopyPaste"  # Default: "OnlyCopy"
 
-#########
-# MOUSE #
-#########
-
 [mouse]
-# When true, the cursor is temporarily hidden when typing
 hide_when_typing = true  # Default: false
