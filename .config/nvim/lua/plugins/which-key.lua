@@ -23,7 +23,7 @@ return { -- Useful plugin to show you pending keybinds.
 			{ "<leader>f", "<Cmd>Telescope frecency workspace=CWD<CR>", desc = "Open file picker", mode = "n" },
 			{
 				"<leader>F",
-				"<Cmd>Oil<CR>",
+				"<Cmd>Oil --preview<CR>",
 				desc = "Open file explorer",
 				mode = "n",
 			},

@@ -5,26 +5,30 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
+-- DO NOT Show which line your cursor is on
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 vim.opt.showmode = false
 vim.opt.showcmd = false
+vim.opt.ruler = false
 vim.opt.mouse = "a" -- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
-
--- Sync clipboard between OS and Neovim.
--- Schedule the setting after `UiEnter` because it can increase startup-time.
-vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
-end)
-
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
+
+-- Sync clipboard between OS and Neovim. Schedule the setting after `UiEnter` because it can increase startup-time.
+vim.schedule(function()
+	vim.opt.clipboard = "unnamedplus"
+end)
+
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.breakindent = true
 vim.opt.undofile = true
+
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300 -- Displays which-key popup sooner
 
@@ -36,12 +40,7 @@ vim.opt.listchars = {
 	nbsp = "␣",
 }
 
--- Preview substitutions live, as you type!
-vim.opt.inccommand = "split"
-
--- DO NOT Show which line your cursor is on
-vim.opt.cursorline = true
-vim.opt.cursorlineopt = "number"
+vim.opt.inccommand = "split" -- Preview substitutions live, as you type!
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 8
@@ -49,8 +48,6 @@ vim.opt.scrolloff = 8
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-
-vim.opt.ruler = false
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gc<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
