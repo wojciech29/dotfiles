@@ -6,7 +6,7 @@ opacity = 0.85  # Default: 1.0
 startup_mode = "Fullscreen"  # Default: "Windowed"
 
 [font]
-normal = { family = "JetBrainsMonoNL Nerd Font", style = "ExtraLight" }  # Default for Linux/BSD: "monospace", Regular
+normal = { family = "JetBrainsMonoNL Nerd Font", style = "Light" }  # Default for Linux/BSD: "monospace", Regular
 bold = { family = "JetBrainsMonoNL Nerd Font", style = "Medium" }  # Inherits family from normal, Default style: Bold
 italic = { family = "JetBrainsMonoNL Nerd Font", style = "Medium Italic" }  # Inherits family from normal, Default style: Italic
 bold_italic = { family = "JetBrainsMonoNL Nerd Font", style = "Bold Italic" }  # Inherits family from normal, Default style: Bold Italic
