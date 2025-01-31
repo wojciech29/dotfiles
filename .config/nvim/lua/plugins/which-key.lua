@@ -48,14 +48,6 @@ return { -- Useful plugin to show you pending keybinds.
 			-- To jump back, press <C-T>.
 			{ "gd", "<Cmd>Telescope lsp_definitions<CR>", desc = "Goto definition", mode = "n" },
 			{ "ga", "<Cmd>b#<CR>", desc = "Goto previous file", mode = "n" },
-			{
-				"gs",
-				function()
-					require("treesitter-context").go_to_context(vim.v.count1)
-				end,
-				desc = "Goto start of context block",
-				mode = "n",
-			},
 		})
 	end,
 }
