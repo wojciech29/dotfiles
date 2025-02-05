@@ -10,7 +10,7 @@ normal = { family = "JetBrainsMonoNL Nerd Font", style = "Light" }  # Default fo
 bold = { family = "JetBrainsMonoNL Nerd Font", style = "Medium" }  # Inherits family from normal, Default style: Bold
 italic = { family = "JetBrainsMonoNL Nerd Font", style = "Medium Italic" }  # Inherits family from normal, Default style: Italic
 bold_italic = { family = "JetBrainsMonoNL Nerd Font", style = "Bold Italic" }  # Inherits family from normal, Default style: Bold Italic
-size = 7.5  # Default: 11.25
+size = 11.25  # Default: 11.25
 
 [terminal]
 # Controls the OSC 52 behavior for clipboard interactions
