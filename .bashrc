@@ -13,7 +13,6 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Show git branch name when in a git repo
-export GIT_PS1_SHOWDIRTYSTATE=1
 BLUE='\[\e[34m\]'
 YELLOW='\[\e[33m\]'
 RESET='\[\e[0m\]'
