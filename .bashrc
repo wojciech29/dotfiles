@@ -48,3 +48,5 @@ eval "$(pyenv init -)"
 
 # Ensure no duplicate entries in PATH
 export PATH=$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | tr '\n' ':' | sed 's/:$//')
+
+. "$HOME/.local/bin/env"

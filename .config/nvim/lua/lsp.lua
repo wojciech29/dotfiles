@@ -45,6 +45,16 @@ vim.api.nvim_create_autocmd("FileType", {
 			name = "pyright",
 			cmd = { "pyright-langserver", "--stdio" },
 			root_dir = root_dir,
+			single_file_support = true,
+			settings = {
+				python = {
+					analysis = {
+						autoSearchPaths = true,
+						useLibraryCodeForTypes = true,
+						diagnosticMode = "openFilesOnly",
+					},
+				},
+			},
 		})
 
 		-- Automatically fix and format on save
