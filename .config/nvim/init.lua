@@ -109,8 +109,6 @@ require("lazy").setup({
 	-- File explorer
 	{
 		"stevearc/oil.nvim",
-		---@module 'oil'
-		---@type oil.SetupOpts
 		opts = {
 			view_options = {
 				show_hidden = true,
@@ -138,25 +136,10 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Autoformatter
-	{
-		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
-		cmd = { "ConformInfo" },
-		opts = {
-			notify_on_error = false,
-			format_on_save = {
-				timeout_ms = 500,
-				lsp_fallback = false,
-			},
-			formatters_by_ft = {
-				lua = { "stylua" },
-				python = { "ruff_fix", "ruff_format" },
-				rust = { "rustfmt" },
-				json = { "jq" },
-			},
-		},
-	},
+	-- LSP progress messages
+	{ "j-hui/fidget.nvim", opts = {} },
 
 	{ import = "plugins" },
 })
+
+require("lsp")

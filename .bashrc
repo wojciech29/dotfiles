@@ -12,14 +12,12 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# Less input handling
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
 # Show git branch name when in a git repo
-parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-export PS1="\[\033[01;32m\]\u \[\033[01;34m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+export GIT_PS1_SHOWDIRTYSTATE=1
+BLUE='\[\e[34m\]'
+YELLOW='\[\e[33m\]'
+RESET='\[\e[0m\]'
+export PS1="${BLUE}   \w\$(__git_ps1 '${YELLOW}  󰘬 %s')${RESET} $ "
 
 # Enable color support of ls and add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -42,9 +40,8 @@ fi
 
 export EDITOR="/usr/share/vim"
 
-export PATH="$PATH:/opt/nvim-linux64/bin"
-
 . "$HOME/.cargo/env"
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
@@ -52,7 +49,3 @@ eval "$(pyenv init -)"
 
 # Ensure no duplicate entries in PATH
 export PATH=$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | tr '\n' ':' | sed 's/:$//')
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
