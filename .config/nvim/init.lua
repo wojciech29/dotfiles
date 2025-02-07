@@ -8,9 +8,6 @@ vim.opt.relativenumber = true
 -- DO NOT Show which line your cursor is on
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
-vim.opt.showmode = false
-vim.opt.showcmd = false
-vim.opt.ruler = false
 vim.opt.mouse = "a" -- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -96,10 +93,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- Detect tabstop and shiftwidth automatically
-	"tpope/vim-sleuth",
-
-	-- Diagnostics displayed in top-right corner
+	-- LSP diagnostics displayed in top-right corner
 	{
 		"dgagn/diagflow.nvim",
 		event = "LspAttach",
@@ -136,10 +130,8 @@ require("lazy").setup({
 		end,
 	},
 
-	-- LSP progress messages
-	{ "j-hui/fidget.nvim", opts = {} },
-
 	{ import = "plugins" },
 })
 
 require("lsp")
+require("statusline")
