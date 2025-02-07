@@ -22,6 +22,7 @@
     stylua
 
     inkscape
+    gimp
     spotify
     signal-desktop
   ];
