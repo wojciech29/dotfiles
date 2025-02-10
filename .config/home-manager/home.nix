@@ -14,13 +14,16 @@
     fd
     tmux
     neovim
+    htop
 
     pyright
     ruff
     nodejs_22
+    yarn
     lua-language-server
     stylua
 
+    flameshot
     inkscape
     gimp
     spotify

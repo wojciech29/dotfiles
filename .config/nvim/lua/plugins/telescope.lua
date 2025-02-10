@@ -75,6 +75,7 @@ return {
 			},
 			extensions = {
 				frecency = {
+					db_version = "v2",
 					disable_devicons = true,
 					show_filter_column = false,
 					show_unindexed = true,

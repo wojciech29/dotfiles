@@ -26,7 +26,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-alias ll='ls -alFH'
+alias ll='ls -alhF'
 
 # Enable programmable completion features
 if ! shopt -oq posix; then
@@ -40,6 +40,7 @@ fi
 export EDITOR="/usr/share/vim"
 
 . "$HOME/.cargo/env"
+. "$HOME/.local/bin/env"
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 export PYENV_ROOT="$HOME/.pyenv"
@@ -48,5 +49,3 @@ eval "$(pyenv init -)"
 
 # Ensure no duplicate entries in PATH
 export PATH=$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | tr '\n' ':' | sed 's/:$//')
-
-. "$HOME/.local/bin/env"

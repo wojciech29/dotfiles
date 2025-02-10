@@ -3,27 +3,41 @@ vim.g.maplocalleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
-vim.opt.number = true
-vim.opt.relativenumber = true
--- DO NOT Show which line your cursor is on
-vim.opt.cursorline = true
-vim.opt.cursorlineopt = "number"
-vim.opt.mouse = "a" -- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.signcolumn = "yes"
 
 -- Sync clipboard between OS and Neovim. Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
 
+-- Line numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+-- Higlight only line number of active line
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
+
+-- Enable sign column -> show diagnostics as dots
+vim.opt.signcolumn = "yes"
+vim.fn.sign_define("DiagnosticSignError", { text = "" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = "" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = "" })
+
+-- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
+vim.opt.mouse = "a"
+
+-- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- Indents
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.breakindent = true
+
 vim.opt.undofile = true
 
 vim.opt.updatetime = 250
@@ -37,7 +51,8 @@ vim.opt.listchars = {
 	nbsp = "␣",
 }
 
-vim.opt.inccommand = "split" -- Preview substitutions live, as you type!
+-- Preview substitutions live, as you type!
+vim.opt.inccommand = "split"
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 8
@@ -46,15 +61,25 @@ vim.opt.scrolloff = 8
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gc<Left><Left><Left>]], { desc = "[R]eplace [W]ord" })
+-- Statusline config
+local mode_map = {
+	n = "NOR",
+	i = "INS",
+	v = "VIS",
+	V = "V-L",
+	[""] = "V-B",
+	R = "REP",
+	c = "CMD",
+}
+vim.opt.statusline = "%!v:lua.GetStatusLine()"
+function GetStatusLine()
+	return string.format(" %s   %%F %%r%%m", mode_map[vim.fn.mode()] or vim.fn.mode())
+end
+vim.opt.showmode = false
+vim.opt.showcmd = false
+vim.opt.ruler = false
 
--- Navigation keymaps
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
-
+-- Highlight when yanking
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
@@ -65,10 +90,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.fn.sign_define("DiagnosticSignError", { text = "" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = "" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = "" })
+--------------------------------------------------------------------------------------------
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -93,6 +115,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	-- Detect tabstop and shiftwidth automatically
+	"tpope/vim-sleuth",
+
 	-- LSP diagnostics displayed in top-right corner
 	{
 		"dgagn/diagflow.nvim",
@@ -130,8 +155,48 @@ require("lazy").setup({
 		end,
 	},
 
+	-- Which-key
+	{
+		"folke/which-key.nvim",
+		event = "VimEnter", -- Sets the loading event to 'VimEnter'
+		config = function() -- This is the function that runs, AFTER loading
+			require("which-key").setup({
+				preset = "helix",
+				sort = { "manual" },
+				colors = false,
+				icons = {
+					mappings = false,
+					separator = " ",
+					keys = {
+						CR = "<CR>",
+						Esc = "<Esc>",
+						BS = "<BS>",
+						Space = "<Space>",
+						Tab = "<Tab>",
+					},
+				},
+			})
+		end,
+	},
+
+	-- Treesitter
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		main = "nvim-treesitter.configs", -- Sets main module to use for opts
+		opts = {
+			ensure_installed = {},
+			auto_install = true,
+			highlight = { enable = true },
+			indent = { disable = { "python" } },
+			context = {
+				enable = true,
+			},
+		},
+	},
+
 	{ import = "plugins" },
 })
 
 require("lsp")
-require("statusline")
+require("keymaps").setup()

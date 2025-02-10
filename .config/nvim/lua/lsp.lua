@@ -1,4 +1,6 @@
--- Lua
+---------
+-- LUA --
+---------
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "lua",
 	callback = function(ev)
@@ -31,7 +33,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 })
 
--- Python
+------------
+-- PYTHON --
+------------
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "python",
 	callback = function(ev)
