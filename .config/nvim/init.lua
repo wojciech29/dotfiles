@@ -79,17 +79,6 @@ vim.opt.showmode = false
 vim.opt.showcmd = false
 vim.opt.ruler = false
 
--- Highlight when yanking
-vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank({
-			timeout = 200,
-		})
-	end,
-})
-
 --------------------------------------------------------------------------------------------
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -114,89 +103,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-	-- Detect tabstop and shiftwidth automatically
-	"tpope/vim-sleuth",
-
-	-- LSP diagnostics displayed in top-right corner
-	{
-		"dgagn/diagflow.nvim",
-		event = "LspAttach",
-		opts = {},
-	},
-
-	-- File explorer
-	{
-		"stevearc/oil.nvim",
-		opts = {
-			view_options = {
-				show_hidden = true,
-			},
-		},
-		lazy = false,
-	},
-
-	-- Colorscheme
-	{
-		"rebelot/kanagawa.nvim",
-		config = function()
-			require("kanagawa").setup({
-				colors = {
-					theme = {
-						all = {
-							ui = {
-								bg_gutter = "none",
-							},
-						},
-					},
-				},
-			})
-			vim.cmd.colorscheme("kanagawa")
-		end,
-	},
-
-	-- Which-key
-	{
-		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter'
-		config = function() -- This is the function that runs, AFTER loading
-			require("which-key").setup({
-				preset = "helix",
-				sort = { "manual" },
-				colors = false,
-				icons = {
-					mappings = false,
-					separator = " ",
-					keys = {
-						CR = "<CR>",
-						Esc = "<Esc>",
-						BS = "<BS>",
-						Space = "<Space>",
-						Tab = "<Tab>",
-					},
-				},
-			})
-		end,
-	},
-
-	-- Treesitter
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
-		opts = {
-			ensure_installed = {},
-			auto_install = true,
-			highlight = { enable = true },
-			indent = { disable = { "python" } },
-			context = {
-				enable = true,
-			},
-		},
-	},
-
-	{ import = "plugins" },
-})
-
+require("lazy").setup({ import = "plugins" })
+require("autocommands")
 require("lsp")
-require("keymaps").setup()
+require("keymaps")

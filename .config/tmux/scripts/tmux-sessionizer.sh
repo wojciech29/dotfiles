@@ -7,9 +7,8 @@ options=(
     "scratches  ~/work/scratches/"
     "ansible    ~/work/devops/ansible/"
     "iris       ~/work/iris/"
-    "private    ~/private/"
     "dotfiles   ~/dotfiles/"
-    "music      ~/Music/"
+    "private    ~/private/"
 )
 
 # Get the selected option (either from fzf or directly from the argument)
