@@ -8,22 +8,32 @@
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
+    # System
     git
     fzf
     ripgrep
     fd
     tmux
-    neovim
     htop
 
+    # Development
+    neovim
+    ## Python
     pyright
     ruff
+    # JS
     nodejs_22
     yarn
+    ## Lua
     lua-language-server
     stylua
+    ## SQL
+    sqruff
+    ## Nix
+    nixd
+    nixfmt-classic
 
-    flameshot
+    # GUI apps
     inkscape
     gimp
     spotify
@@ -51,7 +61,7 @@
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
-      # Add additional package names here
+      # Add allowed unfree packages here
       "spotify"
     ];
 }

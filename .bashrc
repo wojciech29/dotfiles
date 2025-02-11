@@ -37,7 +37,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export EDITOR="/usr/share/vim"
+export EDITOR="/usr/bin/vim"
 
 . "$HOME/.cargo/env"
 . "$HOME/.local/bin/env"
