@@ -36,6 +36,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = "LuaLSP",
+	pattern = "*.lua",
 	callback = function()
 		vim.cmd(":silent !stylua %")
 	end,
@@ -49,7 +50,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	group = "PythonLSP",
 	pattern = "python",
 	callback = function(ev)
-		local root_dir = get_root_dir(ev.buf, { "pyproject.toml" })
+		local root_dir = get_root_dir(ev.buf, { "pyproject.toml", "pyrightconfig.json" })
 
 		vim.lsp.start({
 			name = "ruff",
@@ -69,7 +70,7 @@ vim.api.nvim_create_autocmd("FileType", {
 				},
 				python = {
 					analysis = {
-						ignore = { "*" },
+						typeCheckingMode = "strict",
 					},
 				},
 			},
