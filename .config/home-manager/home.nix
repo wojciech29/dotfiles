@@ -35,6 +35,7 @@
 
     # GUI apps
     inkscape
+    clementine
     gimp
     spotify
     signal-desktop

@@ -2,7 +2,12 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
 vim.opt.termguicolors = true
+vim.opt.swapfile = false
+vim.opt.undofile = true
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
 
 -- Sync clipboard between OS and Neovim. Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
@@ -38,11 +43,6 @@ vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.breakindent = true
 
-vim.opt.undofile = true
-
-vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300 -- Displays which-key popup sooner
-
 -- Sets how neovim will display certain whitespace characters in the editor.
 vim.opt.list = true
 vim.opt.listchars = {
@@ -75,6 +75,7 @@ vim.opt.statusline = "%!v:lua.GetStatusLine()"
 function GetStatusLine()
 	return string.format(" %s   %%F %%r%%m", mode_map[vim.fn.mode()] or vim.fn.mode())
 end
+
 vim.opt.showmode = false
 vim.opt.showcmd = false
 vim.opt.ruler = false
@@ -103,7 +104,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({ import = "plugins" })
+require("lazy").setup("plugins")
 require("autocommands")
 require("lsp")
 require("keymaps")

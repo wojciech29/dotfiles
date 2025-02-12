@@ -21,16 +21,16 @@ return {
 	-- Colorscheme
 	{
 		"rebelot/kanagawa.nvim",
-		config = function()
-			require("kanagawa").setup({
-				colors = {
-					theme = {
-						all = {
-							ui = { bg_gutter = "none" },
-						},
+		opts = {
+			colors = {
+				theme = {
+					all = {
+						ui = { bg_gutter = "none" },
 					},
 				},
-			})
+			},
+		},
+		config = function()
 			vim.cmd.colorscheme("kanagawa")
 		end,
 	},
@@ -38,25 +38,23 @@ return {
 	-- Which-key
 	{
 		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter'
-		config = function() -- This is the function that runs, AFTER loading
-			require("which-key").setup({
-				preset = "helix",
-				sort = { "manual" },
-				colors = false,
-				icons = {
-					mappings = false,
-					separator = " ",
-					keys = {
-						CR = "<CR>",
-						Esc = "<Esc>",
-						BS = "<BS>",
-						Space = "<Space>",
-						Tab = "<Tab>",
-					},
+		event = "VeryLazy",
+		opts = {
+			preset = "helix",
+			sort = { "manual" },
+			colors = false,
+			icons = {
+				mappings = false,
+				separator = " ",
+				keys = {
+					CR = "<CR>",
+					Esc = "<Esc>",
+					BS = "<BS>",
+					Space = "<Space>",
+					Tab = "<Tab>",
 				},
-			})
-		end,
+			},
+		},
 	},
 
 	-- Treesitter
@@ -71,6 +69,8 @@ return {
 			context = { enable = true },
 		},
 	},
+
+	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",

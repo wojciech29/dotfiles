@@ -17,7 +17,7 @@ map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gc<Left><Left><Left>]], { 
 -- Go to
 map("n", "gr", "<Cmd>Telescope lsp_references<CR>", { desc = "Go To references" })
 map("n", "gd", "<Cmd>Telescope lsp_definitions<CR>", { desc = "Go To definition" }) -- To jump back, press <C-T>
-map("n", "ga", "<Cmd>b#<CR>", { desc = "Go To previous file" })
+map("n", "ga", "<Cmd>b#<CR>", { desc = "Go To previous buffer" })
 
 -- Navigation - centering the position
 map("n", "<C-d>", "<C-d>zz")
