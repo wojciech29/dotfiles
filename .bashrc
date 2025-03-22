@@ -16,7 +16,7 @@ HISTFILESIZE=2000
 BLUE='\[\e[34m\]'
 YELLOW='\[\e[33m\]'
 RESET='\[\e[0m\]'
-export PS1="${BLUE}   \w\$(__git_ps1 '${YELLOW}  󰘬 %s')${RESET} $ "
+export PS1="${BLUE}   \w\$(__git_ps1 '${YELLOW}  󰘬 %s') \n${RESET} \$ "
 
 # Enable color support of ls and add handy aliases
 if [ -x /usr/bin/dircolors ]; then

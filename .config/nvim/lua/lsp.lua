@@ -87,6 +87,18 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 })
 
+-----------------
+-- Django HTML --
+-----------------
+vim.api.nvim_create_augroup("DjangoLSP", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePost", {
+	group = "DjangoLSP",
+	pattern = "*.html",
+	callback = function()
+		vim.cmd(":silent !djlint --reformat %")
+	end,
+})
+
 ---------
 -- NIX --
 ---------
@@ -108,5 +120,21 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*.sql",
 	callback = function()
 		vim.cmd(":silent !sqruff fix --force %")
+	end,
+})
+
+----------
+-- RUST --
+----------
+vim.api.nvim_create_augroup("RustLSP", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+	group = "RustLSP",
+	pattern = "rust",
+	callback = function(ev)
+		vim.lsp.start({
+			name = "rust-analyzer",
+			cmd = { "rust-analyzer" },
+			root_dir = get_root_dir(ev.buf, {}),
+		})
 	end,
 })

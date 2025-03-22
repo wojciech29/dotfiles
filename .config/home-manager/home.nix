@@ -15,9 +15,12 @@
     fd
     tmux
     htop
+    fswatch
+    lf
 
     # Development
     neovim
+    jq
     ## Python
     pyright
     ruff
@@ -32,6 +35,8 @@
     ## Nix
     nixd
     nixfmt-classic
+    ## Rust
+    rust-analyzer
 
     # GUI apps
     inkscape
@@ -39,6 +44,7 @@
     gimp
     spotify
     signal-desktop
+    librecad
   ];
 
   programs.git = {

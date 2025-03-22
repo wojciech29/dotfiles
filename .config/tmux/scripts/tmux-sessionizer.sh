@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 options=(
-    "home       ~/"
-    "htop       ~/"
-    "erp        ~/work/erp/"
-    "tardis     ~/work/tardis/"
-    "scratches  ~/work/scratches/"
-    "ansible    ~/work/devops/ansible/"
-    "iris       ~/work/iris/"
-    "dotfiles   ~/dotfiles/"
-    "private    ~/private/"
+    "home       $HOME/"
+    "htop       $HOME/"
+    "erp        $HOME/work/erp/"
+    "tardis     $HOME/work/tardis/"
+    "scratches  $HOME/work/scratches/"
+    "ansible    $HOME/work/devops/ansible/"
+    "iris       $HOME/work/iris/"
+    "dotfiles   $HOME/dotfiles/"
+    "private    $HOME/private/"
 )
 
 # Get the selected option (either from fzf or directly from the argument)

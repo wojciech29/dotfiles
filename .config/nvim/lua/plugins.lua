@@ -2,18 +2,22 @@ return {
 	-- Detect tabstop and shiftwidth automatically
 	"tpope/vim-sleuth",
 
-	-- LSP diagnostics displayed in top-right corner
-	{
-		"dgagn/diagflow.nvim",
-		event = "LspAttach",
-		opts = {},
-	},
+	-- -- LSP diagnostics displayed in top-right corner
+	-- {
+	-- 	"dgagn/diagflow.nvim",
+	-- 	event = "LspAttach",
+	-- 	opts = {},
+	-- },
 
 	-- File explorer
 	{
 		"stevearc/oil.nvim",
 		opts = {
 			view_options = { show_hidden = true },
+			keymaps = {
+				["<C-p>"] = false,
+				["q"] = { "actions.close", mode = "n" },
+			},
 		},
 		lazy = false,
 	},
