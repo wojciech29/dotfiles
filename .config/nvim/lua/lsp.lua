@@ -5,35 +5,54 @@ local function get_root_dir(buf, markers)
 	end
 	return vim.fs.root(buf, markers) or vim.uv.cwd()
 end
+vim.o.completeopt = "menu,noinsert,popup,fuzzy"
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(ev)
+		local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+		if client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+		end
+
+		if client:supports_method("textDocument/inlayHint") then
+			vim.keymap.set("n", "<leader>th", function()
+				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }))
+			end, { buffer = ev.buf, desc = "LSP: " .. "[T]oggle Inlay [H]ints" })
+		end
+	end,
+})
+vim.lsp.config("*", {
+	root_markers = { ".git" },
+	capabilities = {
+		textDocument = {
+			semanticTokens = {
+				multilineTokenSupport = true,
+			},
+		},
+	},
+})
 
 ---------
 -- LUA --
 ---------
-vim.api.nvim_create_augroup("LuaLSP", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-	group = "LuaLSP",
-	pattern = "lua",
-	callback = function(ev)
-		vim.lsp.start({
-			name = "lua-language-server",
-			cmd = { "lua-language-server" },
-			root_dir = get_root_dir(ev.buf, { ".stylua.toml", "stylua.toml" }),
-			settings = {
-				Lua = {
-					runtime = { version = "LuaJIT" },
-					workspace = {
-						checkThirdParty = false,
-						library = {
-							vim.env.VIMRUNTIME,
-							"${3rd}/luv/library",
-						},
-					},
+vim.lsp.config.luals = {
+	cmd = { "lua-language-server" },
+	root_markers = { ".stylua.toml", "stylua.toml" },
+	filetypes = { "lua" },
+	settings = {
+		Lua = {
+			runtime = { version = "LuaJIT" },
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+					"${3rd}/luv/library",
 				},
 			},
-		})
-	end,
-})
-
+		},
+	},
+}
+vim.lsp.enable({ "luals" })
+vim.api.nvim_create_augroup("LuaLSP", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = "LuaLSP",
 	pattern = "*.lua",
@@ -45,39 +64,32 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ------------
 -- PYTHON --
 ------------
-vim.api.nvim_create_augroup("PythonLSP", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-	group = "PythonLSP",
-	pattern = "python",
-	callback = function(ev)
-		local root_dir = get_root_dir(ev.buf, { "pyproject.toml", "pyrightconfig.json" })
+vim.lsp.config.ruff = {
+	cmd = { "ruff", "server" },
+	root_markers = { "pyproject.toml" },
+	filetypes = { "python" },
+}
+vim.lsp.enable({ "ruff" })
 
-		vim.lsp.start({
-			name = "ruff",
-			cmd = { "ruff", "server" },
-			root_dir = root_dir,
-		})
-
-		vim.lsp.start({
-			name = "pyright",
-			cmd = { "pyright-langserver", "--stdio" },
-			root_dir = root_dir,
-			single_file_support = true,
-			settings = {
-				pyright = {
-					-- Using Ruff's import organizer
-					disableOrganizeImports = true,
-				},
-				python = {
-					analysis = {
-						typeCheckingMode = "strict",
-					},
-				},
+vim.lsp.config.pyright = {
+	cmd = { "pyright-langserver", "--stdio" },
+	root_markers = { "pyproject.toml", "pyrightconfig.json" },
+	filetypes = { "python" },
+	settings = {
+		pyright = {
+			-- Using Ruff's import organizer
+			disableOrganizeImports = true,
+		},
+		python = {
+			analysis = {
+				typeCheckingMode = "strict",
 			},
-		})
-	end,
-})
+		},
+	},
+}
+vim.lsp.enable({ "pyright" })
 
+vim.api.nvim_create_augroup("PythonLSP", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = "PythonLSP",
 	pattern = "*.py",
@@ -108,18 +120,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*.nix",
 	callback = function()
 		vim.cmd(":silent !nixfmt %")
-	end,
-})
-
----------
--- SQL --
----------
-vim.api.nvim_create_augroup("SqlLSP", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-	group = "SqlLSP",
-	pattern = "*.sql",
-	callback = function()
-		vim.cmd(":silent !sqruff fix --force %")
 	end,
 })
 

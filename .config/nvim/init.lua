@@ -22,15 +22,29 @@ vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
+-- LSP & DIAGNOSTICS
 -- Enable sign column -> show diagnostics as dots
 vim.opt.signcolumn = "yes"
-vim.fn.sign_define("DiagnosticSignError", { text = "" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = "" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = "" })
+vim.diagnostic.config({
+	virtual_text = {
+		current_line = true,
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.HINT] = "",
+			[vim.diagnostic.severity.INFO] = "",
+			[vim.diagnostic.severity.ERROR] = "",
+			[vim.diagnostic.severity.WARN] = "",
+		},
+	},
+})
 
 -- Enable mouse mode, can be useful for resizing splits for example! - "a" is all modes, "n" is normal mode only
 vim.opt.mouse = "a"
+vim.keymap.set("n", "<RightMouse>", "<Nop>")
+vim.keymap.set("i", "<RightMouse>", "<Nop>")
+vim.keymap.set("v", "<RightMouse>", "<Nop>")
+vim.keymap.set("c", "<RightMouse>", "<Nop>")
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true

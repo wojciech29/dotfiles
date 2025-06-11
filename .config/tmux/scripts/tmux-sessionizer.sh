@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 
 options=(
-    "home       $HOME/"
-    "htop       $HOME/"
-    "erp        $HOME/work/erp/"
-    "tardis     $HOME/work/tardis/"
-    "scratches  $HOME/work/scratches/"
-    "ansible    $HOME/work/devops/ansible/"
-    "iris       $HOME/work/iris/"
-    "dotfiles   $HOME/dotfiles/"
-    "private    $HOME/private/"
+    "home               $HOME/"
+    "htop               $HOME/"
+
+    "meteo-ssh          $HOME/"
+    "meteo-scratches    $HOME/work/scratches/meteo/"
+    "meteo-meteosource  $HOME/work/meteosource/"
+    "meteo-crons        $HOME/work/crontab-secure/"
+    "meteo-grib2hdf     $HOME/work/grib2hdf/"
+    "meteo-nowcasting   $HOME/work/nowcasting/"
+
+    "tz-ssh             $HOME/"
+    "tz-scratches       $HOME/work/scratches/tz/"
+    "tz-erp             $HOME/work/erp/"
+    "tz-tardis          $HOME/work/tardis/"
+    "tz-ansible         $HOME/work/devops/ansible/"
+    "tz-iris            $HOME/work/iris/"
+
+    "scratches          $HOME/work/scratches/"
+    "dotfiles           $HOME/dotfiles/"
+    "private            $HOME/private/"
 )
 
 # Get the selected option (either from fzf or directly from the argument)

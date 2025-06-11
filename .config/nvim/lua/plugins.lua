@@ -2,7 +2,7 @@ return {
 	-- Detect tabstop and shiftwidth automatically
 	"tpope/vim-sleuth",
 
-	-- -- LSP diagnostics displayed in top-right corner
+	-- -- -- LSP diagnostics displayed in top-right corner
 	-- {
 	-- 	"dgagn/diagflow.nvim",
 	-- 	event = "LspAttach",
@@ -18,6 +18,19 @@ return {
 				["<C-p>"] = false,
 				["q"] = { "actions.close", mode = "n" },
 			},
+			preview_win = {
+				disable_preview = function(filename)
+					local preview_disabled_extensions = { ".pdf", ".h5", ".png" }
+
+					filename = filename:lower()
+					for _, ext in ipairs(preview_disabled_extensions) do
+						if vim.endswith(filename, ext) then
+							return true
+						end
+					end
+					return false
+				end,
+			},
 		},
 		lazy = false,
 	},
@@ -25,16 +38,18 @@ return {
 	-- Colorscheme
 	{
 		"rebelot/kanagawa.nvim",
-		opts = {
-			colors = {
-				theme = {
-					all = {
-						ui = { bg_gutter = "none" },
+		config = function()
+			require("kanagawa").setup({
+				colors = {
+					theme = {
+						all = {
+							ui = {
+								bg_gutter = "none",
+							},
+						},
 					},
 				},
-			},
-		},
-		config = function()
+			})
 			vim.cmd.colorscheme("kanagawa")
 		end,
 	},
@@ -72,6 +87,28 @@ return {
 			highlight = { enable = true },
 			context = { enable = true },
 		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("treesitter-context").setup({
+				enable = true,
+				max_lines = 5, -- no limit
+				trim_scope = "outer",
+				mode = "cursor",
+			})
+		end,
+	},
+
+	-- Curl
+	{
+		"oysandvik94/curl.nvim",
+		cmd = { "CurlOpen" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		config = true,
 	},
 
 	-- Telescope
@@ -141,6 +178,7 @@ return {
 						"%.exe",
 						"%.pdf",
 						"ktlint",
+						"%.h5",
 					},
 					mappings = {
 						i = {

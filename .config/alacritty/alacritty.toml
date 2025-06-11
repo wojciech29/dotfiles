@@ -8,7 +8,7 @@ startup_mode = "Fullscreen"  # Default: "Windowed"
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font", style = "Light" }  # Default for Linux/BSD: "monospace", Regular
 bold = { family = "JetBrainsMonoNL Nerd Font", style = "Medium" }  # Inherits family from normal, Default style: Bold
-size = 11.25  # Default: 11.25
+size = 12 # Default: 11.25
 
 [terminal]
 # Controls the OSC 52 behavior for clipboard interactions
